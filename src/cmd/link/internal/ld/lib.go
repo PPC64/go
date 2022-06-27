@@ -405,6 +405,12 @@ func (ctxt *Link) loadlib() {
 				ctxt.Logf("autolib: %s (from %s)\n", lib.File, lib.Objref)
 			}
 			loadobjfile(ctxt, lib)
+			j := 0
+			for ; j < len(ctxt.Library[i].Textp); j++ {
+			 if (ctxt.Library[i].Textp[j].Attr & sym.AttrReachable) == sym.AttrReachable {
+			   fmt.Printf("COELHO: i=%d, j=%d, Name=%s\n", i, i, ctxt.Library[i].Textp[j].Name)
+			 }
+			}
 		}
 	}
 

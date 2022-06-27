@@ -11,6 +11,11 @@ unset LANG
 export LC_ALL=C
 export LC_CTYPE=C
 
+# if gcc does not exist and $CC is not set, try clang if available.                                                               
+if [ -z "$CC" -a -z "$(type -t gcc)" -a -n "$(type -t clang)" ]; then                                                             
+  export CC=clang CXX=clang++                                                                                                     
+fi    
+
 CC=${CC:-gcc}
 
 if [[ "$GOOS" -eq "solaris" ]]; then

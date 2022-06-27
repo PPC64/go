@@ -8,6 +8,8 @@ package syscall
 
 import (
 	"unsafe"
+	//"time"
+	//"os"
 )
 
 type SysProcAttr struct {
@@ -78,6 +80,10 @@ func forkAndExecInChild(argv0 *byte, argv, envv []*byte, chroot, dir *byte, attr
 
 	// Fork succeeded, now in child.
 
+//	_, ok := os.LookupEnv("SLEEP")
+//	if (ok) {
+//	  Sleep(30 * Second)
+//}
 	runtime_AfterForkInChild()
 
 	// Enable tracing if requested.
@@ -235,6 +241,7 @@ func forkAndExecInChild(argv0 *byte, argv, envv []*byte, chroot, dir *byte, attr
 		}
 	}
 
+	//println("coelho child 2222222")
 	// Time to exec.
 	_, _, err1 = RawSyscall(SYS_EXECVE,
 		uintptr(unsafe.Pointer(argv0)),
@@ -243,8 +250,10 @@ func forkAndExecInChild(argv0 *byte, argv, envv []*byte, chroot, dir *byte, attr
 
 childerror:
 	// send error code on pipe
+	println("coelho child error: ", err1)
 	RawSyscall(SYS_WRITE, uintptr(pipe), uintptr(unsafe.Pointer(&err1)), unsafe.Sizeof(err1))
 	for {
+		println("coelho SYS_EXIT")
 		RawSyscall(SYS_EXIT, 253, 0, 0)
 	}
 }

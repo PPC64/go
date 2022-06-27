@@ -191,7 +191,7 @@ func thr_start()
 //go:nowritebarrier
 func newosproc(mp *m) {
 	stk := unsafe.Pointer(mp.g0.stack.hi)
-	if false {
+	if false { 
 		print("newosproc stk=", stk, " m=", mp, " g=", mp.g0, " thr_start=", funcPC(thr_start), " id=", mp.id, " ostk=", &mp, "\n")
 	}
 
@@ -413,6 +413,9 @@ func sysauxv(auxv []uintptr) {
 //go:nosplit
 func sysSigaction(sig uint32, new, old *sigactiont) {
 	// Use system stack to avoid split stack overflow on amd64
+  if (sig == 0) {
+    print ("xx")
+	}
 	if asmSigaction(uintptr(sig), new, old) != 0 {
 		systemstack(func() {
 			throw("sigaction failed")

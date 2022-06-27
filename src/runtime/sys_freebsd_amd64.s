@@ -10,6 +10,7 @@
 #include "go_tls.h"
 #include "textflag.h"
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·sys_umtx_op(SB),NOSPLIT,$0
 	MOVQ addr+0(FP), DI
 	MOVL mode+8(FP), SI
@@ -21,6 +22,7 @@ TEXT runtime·sys_umtx_op(SB),NOSPLIT,$0
 	MOVL	AX, ret+32(FP)
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·thr_new(SB),NOSPLIT,$0
 	MOVQ param+0(FP), DI
 	MOVL size+8(FP), SI
@@ -29,6 +31,7 @@ TEXT runtime·thr_new(SB),NOSPLIT,$0
 	MOVL	AX, ret+16(FP)
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·thr_start(SB),NOSPLIT,$0
 	MOVQ	DI, R13 // m
 
@@ -132,6 +135,7 @@ TEXT runtime·write1(SB),NOSPLIT,$-8
 	MOVL	AX, ret+24(FP)
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·thr_self(SB),NOSPLIT,$0-8
 	// thr_self(&0(FP))
 	LEAQ	ret+0(FP), DI	// arg 1
@@ -139,6 +143,7 @@ TEXT runtime·thr_self(SB),NOSPLIT,$0-8
 	SYSCALL
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·thr_kill(SB),NOSPLIT,$0-16
 	// thr_kill(tid, sig)
 	MOVQ	tid+0(FP), DI	// arg 1 id
@@ -166,6 +171,7 @@ TEXT runtime·setitimer(SB), NOSPLIT, $-8
 	SYSCALL
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // func fallback_walltime() (sec int64, nsec int32)
 TEXT runtime·fallback_walltime(SB), NOSPLIT, $32-12
 	MOVL	$232, AX	// clock_gettime
@@ -180,6 +186,7 @@ TEXT runtime·fallback_walltime(SB), NOSPLIT, $32-12
 	MOVL	DX, nsec+8(FP)
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·fallback_nanotime(SB), NOSPLIT, $32-8
 	MOVL	$232, AX
 	MOVQ	$4, DI		// CLOCK_MONOTONIC
@@ -195,6 +202,7 @@ TEXT runtime·fallback_nanotime(SB), NOSPLIT, $32-8
 	MOVQ	AX, ret+0(FP)
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·asmSigaction(SB),NOSPLIT,$0
 	MOVQ	sig+0(FP), DI		// arg 1 sig
 	MOVQ	new+8(FP), SI		// arg 2 act
@@ -206,6 +214,7 @@ TEXT runtime·asmSigaction(SB),NOSPLIT,$0
 	MOVL	AX, ret+24(FP)
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·callCgoSigaction(SB),NOSPLIT,$16
 	MOVQ	sig+0(FP), DI		// arg 1 sig
 	MOVQ	new+8(FP), SI		// arg 2 act
@@ -369,6 +378,7 @@ TEXT runtime·madvise(SB),NOSPLIT,$0
 	MOVL	AX, ret+24(FP)
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·sigaltstack(SB),NOSPLIT,$-8
 	MOVQ	new+0(FP), DI
 	MOVQ	old+8(FP), SI
@@ -394,6 +404,7 @@ TEXT runtime·usleep(SB),NOSPLIT,$16
 	SYSCALL
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // set tls base to DI
 TEXT runtime·settls(SB),NOSPLIT,$8
 	ADDQ	$8, DI	// adjust for ELF: wants to use -8(FS) for g and m
@@ -406,6 +417,7 @@ TEXT runtime·settls(SB),NOSPLIT,$8
 	MOVL	$0xf1, 0xf1  // crash
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·sysctl(SB),NOSPLIT,$0
 	MOVQ	mib+0(FP), DI		// arg 1 - name
 	MOVL	miblen+8(FP), SI		// arg 2 - namelen
@@ -423,6 +435,7 @@ TEXT runtime·sysctl(SB),NOSPLIT,$0
 	MOVL	AX, ret+48(FP)
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TEXT runtime·osyield(SB),NOSPLIT,$-4
 	MOVL	$331, AX		// sys_sched_yield
 	SYSCALL
@@ -489,6 +502,7 @@ TEXT runtime·setNonblock(SB),NOSPLIT,$0-4
 	SYSCALL
 	RET
 
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // func cpuset_getaffinity(level int, which int, id int64, size int, mask *byte) int32
 TEXT runtime·cpuset_getaffinity(SB), NOSPLIT, $0-44
 	MOVQ	level+0(FP), DI

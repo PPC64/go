@@ -92,6 +92,7 @@ func genplt(ctxt *ld.Link) {
 	// This assumes "case 1" from the ABI, where the caller needs
 	// us to save and restore the TOC pointer.
 	var stubs []*sym.Symbol
+  println("coelho genplt 00 ", len(ctxt.Textp));
 	for _, s := range ctxt.Textp {
 		for i := range s.R {
 			r := &s.R[i]
@@ -131,9 +132,11 @@ func genplt(ctxt *ld.Link) {
 	// the addresses are known and trampolines can be inserted
 	// when necessary.
 	ctxt.Textp = append(stubs, ctxt.Textp...)
+  println("coelho genplt 01 ", len(ctxt.Textp));
 }
 
 func genaddmoduledata(ctxt *ld.Link) {
+  println("coelho genaddmoduledata 00 ", len(ctxt.Textp));
 	addmoduledata := ctxt.Syms.ROLookup("runtime.addmoduledata", sym.SymVerABI0)
 	if addmoduledata.Type == sym.STEXT && ctxt.BuildMode != ld.BuildModePlugin {
 		return
@@ -204,16 +207,20 @@ func genaddmoduledata(ctxt *ld.Link) {
 	initarray_entry.Attr |= sym.AttrLocal
 	initarray_entry.Type = sym.SINITARR
 	initarray_entry.AddAddr(ctxt.Arch, initfunc)
+  println("coelho genaddmoduledata 01 ", len(ctxt.Textp));
 }
 
 func gentext(ctxt *ld.Link) {
+	println("coelho len textp 11", len(ctxt.Textp))
 	if ctxt.DynlinkingGo() {
 		genaddmoduledata(ctxt)
 	}
+	println("coelho len textp 11", len(ctxt.Textp))
 
 	if ctxt.LinkMode == ld.LinkInternal {
 		genplt(ctxt)
 	}
+	println("coelho len textp 11", len(ctxt.Textp))
 }
 
 // Construct a call stub in stub that calls symbol targ via its PLT

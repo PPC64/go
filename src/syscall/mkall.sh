@@ -75,6 +75,7 @@
 
 GOOSARCH="${GOOS}_${GOARCH}"
 
+MYGO="/usr/home/mfwt74/repo/go-bootstrap/go-freebsd-ppc64-bootstrap/bin/go"
 # defaults
 mksyscall="./mksyscall.pl"
 mkerrors="./mkerrors.sh"
@@ -180,6 +181,16 @@ freebsd_arm64)
 	# Let the type of C char be signed to make the bare syscall
 	# API consistent between platforms.
 	mktypes="GOARCH=$GOARCH go tool cgo -godefs -- -fsigned-char"
+	;;
+freebsd_ppc64)
+	mkerrors="$mkerrors -m64"
+	mksysnum="curl -s 'http://svn.freebsd.org/base/stable/10/sys/kern/syscalls.master' | ./mksysnum_freebsd.pl"
+  mktypes="GOARCH=$GOARCH $MYGO tool cgo -godefs"
+	;;
+freebsd_ppc64le)
+	mkerrors="$mkerrors -m64"
+	mksysnum="curl -s 'http://svn.freebsd.org/base/stable/10/sys/kern/syscalls.master' | ./mksysnum_freebsd.pl"
+  mktypes="GOARCH=$GOARCH $MYGO tool cgo -godefs"
 	;;
 linux_386)
 	mkerrors="$mkerrors -m32"
@@ -370,7 +381,7 @@ esac
 	if [ -n "$mktypes" ]; then
 		# ztypes_$GOOSARCH.go could be erased before "go run mkpost.go" is called.
 		# Therefore, "go run" tries to recompile syscall package but ztypes is empty and it fails.
-		echo "$mktypes types_$GOOS.go |go run mkpost.go >ztypes_$GOOSARCH.go.NEW && mv ztypes_$GOOSARCH.go.NEW ztypes_$GOOSARCH.go";
+		echo "$mktypes types_$GOOS.go | $MYGO run mkpost.go >ztypes_$GOOSARCH.go.NEW && mv ztypes_$GOOSARCH.go.NEW ztypes_$GOOSARCH.go";
 	fi
 	if [ -n "$mkasm" ]; then echo "$mkasm $GOARCH"; fi
 ) | $run

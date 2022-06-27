@@ -48,12 +48,12 @@ echo "#### Copying to $targ"
 cp -Rp "$src" "$targ"
 cd "$targ"
 echo
-echo "#### Cleaning $targ"
-chmod -R +w .
-rm -f .gitignore
-if [ -e .git ]; then
-	git clean -f -d
-fi
+#echo "#### Cleaning $targ"
+#chmod -R +w .
+#rm -f .gitignore
+#if [ -e .git ]; then
+#	git clean -f -d
+#fi
 echo
 echo "#### Building $targ"
 echo

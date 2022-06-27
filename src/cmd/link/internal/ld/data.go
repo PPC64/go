@@ -933,6 +933,7 @@ func addstrdata(ctxt *Link, name, value string) {
 		// Not defined in the loaded packages.
 		return
 	}
+  println("coelho addstrdata name,value=",name,value)
 	if s.Gotype.Name != "type.string" {
 		Errorf(s, "cannot set with -X: not a var of type string (%s)", s.Gotype.Name)
 		return
@@ -2029,9 +2030,18 @@ func (ctxt *Link) buildinfo() {
 
 // assign addresses to text
 func (ctxt *Link) textaddress() {
+	argLength := len(os.Args[1:])  
+	fmt.Printf("Arg length is %d\n", argLength)
+
+	for i, a := range os.Args[0:] {
+	  fmt.Printf("Arg %d is %s\n", i+1, a)
+	}
+	println("coelho len textp 00", len(ctxt.Textp))
+	fmt.Println("WORK:", os.Getenv("WORK"))
+	fmt.Println("GOARCH:", os.Getenv("GOARCH"))
 	addsection(ctxt.Arch, &Segtext, ".text", 05)
 
-	// Assign PCs in text segment.
+	  // Assign PCs in text segment.
 	// Could parallelize, by assigning to text
 	// and then letting threads copy down, but probably not worth it.
 	sect := Segtext.Sections[0]

@@ -335,8 +335,10 @@ func (c *Cmd) closeDescriptors(closers []io.Closer) {
 // process will inherit the caller's thread state.
 func (c *Cmd) Run() error {
 	if err := c.Start(); err != nil {
+		println("coelho 666666")
 		return err
 	}
+	//println("coelho 7777777", c.Path)
 	return c.Wait()
 }
 
@@ -421,6 +423,7 @@ func (c *Cmd) Start() error {
 		Sys:   c.SysProcAttr,
 	})
 	if err != nil {
+	  println("coelho 555555")
 		c.closeDescriptors(c.closeAfterStart)
 		c.closeDescriptors(c.closeAfterWait)
 		return err

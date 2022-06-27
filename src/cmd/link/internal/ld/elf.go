@@ -495,11 +495,12 @@ func Elfinit(ctxt *Link) {
 	switch ctxt.Arch.Family {
 	// 64-bit architectures
 	case sys.PPC64, sys.S390X:
-		if ctxt.Arch.ByteOrder == binary.BigEndian {
-			ehdr.flags = 1 /* Version 1 ABI */
-		} else {
-			ehdr.flags = 2 /* Version 2 ABI */
-		}
+		// if ctxt.Arch.ByteOrder == binary.BigEndian {
+		// 	ehdr.flags = 1 /* Version 1 ABI */
+		// } else {
+		// 	ehdr.flags = 2 /* Version 2 ABI */
+		// }
+		ehdr.flags = 2 /* Version 2 ABI */
 		fallthrough
 	case sys.AMD64, sys.ARM64, sys.MIPS64, sys.RISCV64:
 		if ctxt.Arch.Family == sys.MIPS64 {

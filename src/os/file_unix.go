@@ -110,6 +110,12 @@ func newFile(fd uintptr, name string, kind newFileKind) *File {
 	if fdi < 0 {
 		return nil
 	}
+	//if (name == "/dev/null") {
+  //  println("chegou");
+	//}
+	if (name == "|0") {
+	  //println("file name=",name)
+  }
 	f := &File{&file{
 		pfd: poll.FD{
 			Sysfd:         fdi,

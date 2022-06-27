@@ -56,7 +56,8 @@ func syscall_runtime_envs() []string { return append([]string{}, envs...) }
 func syscall_Getpagesize() int { return int(physPageSize) }
 
 //go:linkname os_runtime_args os.runtime_args
-func os_runtime_args() []string { return append([]string{}, argslice...) }
+func os_runtime_args() []string { return append([]string{}, argslice...) 
+}
 
 //go:linkname syscall_Exit syscall.Exit
 //go:nosplit

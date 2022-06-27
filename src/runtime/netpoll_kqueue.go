@@ -99,8 +99,7 @@ func netpollBreak() {
 // delay > 0: block for up to that many nanoseconds
 func netpoll(delay int64) gList {
 	if kq == -1 {
-		return gList{}
-	}
+		return gList{} }
 	var tp *timespec
 	var ts timespec
 	if delay < 0 {
@@ -108,6 +107,9 @@ func netpoll(delay int64) gList {
 	} else if delay == 0 {
 		tp = &ts
 	} else {
+		if (delay > 1e6) {
+		  delay = 1e6
+		}
 		ts.setNsec(delay)
 		if ts.tv_sec > 1e6 {
 			// Darwin returns EINVAL if the sleep time is too long.
@@ -116,11 +118,17 @@ func netpoll(delay int64) gList {
 		tp = &ts
 	}
 	var events [64]keventt
+	//println("ZZZZZZ runtime: kevent on fd", kq, " delay is ", delay, "ts.tv_sec: ", ts.tv_sec)
 retry:
 	n := kevent(kq, nil, 0, &events[0], int32(len(events)), tp)
 	if n < 0 {
 		if n != -_EINTR {
-			println("runtime: kevent on fd", kq, "failed with", -n)
+			//println("events.data = ",  (*int64)(unsafe.Pointer(events[0].data)) )
+			println("events.ident = ",  events[0].ident )
+			println("events.data = ",  events[0].data )
+			println("events.flags = ",  events[0].flags )
+			println("events.fflags = ",  events[0].fflags )
+			println("runtime: kevent on fd", kq, "failed with", -n, " delay is ", delay, "ts.tv_sec: ", ts.tv_sec)
 			throw("runtime: netpoll failed")
 		}
 		// If a timed sleep was interrupted, just return to

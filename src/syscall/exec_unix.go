@@ -207,13 +207,17 @@ func forkExec(argv0 string, argv []string, attr *ProcAttr) (pid int, err error) 
 
 	// Read child error status from pipe.
 	Close(p[1])
+	//println("coelho aaaaa")
 	n, err = readlen(p[0], (*byte)(unsafe.Pointer(&err1)), int(unsafe.Sizeof(err1)))
 	Close(p[0])
+	//println("coelho bbbbb")
 	if err != nil || n != 0 {
 		if n == int(unsafe.Sizeof(err1)) {
+			println("coelho 11111111")
 			err = Errno(err1)
 		}
 		if err == nil {
+			println("coelho 2222222")
 			err = EPIPE
 		}
 
@@ -223,13 +227,16 @@ func forkExec(argv0 string, argv []string, attr *ProcAttr) (pid int, err error) 
 		for err1 == EINTR {
 			_, err1 = Wait4(pid, &wstatus, 0, nil)
 		}
+		//println("coelho 333333")
 		return 0, err
 	}
 
 	// Read got EOF, so pipe closed on exec, so exec succeeded.
+	//println("coelho 444444 pid=", pid, " n=", n)
 	return pid, nil
 
 error:
+	println("coelho 555555 p[0]=", p[0], " p[1]=", p[1])
 	if p[0] >= 0 {
 		Close(p[0])
 		Close(p[1])

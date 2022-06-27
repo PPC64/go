@@ -4463,7 +4463,7 @@ func sysmon() {
 	delay := uint32(0)
 	for {
 		if idle == 0 { // start with 20us sleep...
-			delay = 20
+			delay = 2000
 		} else if idle > 50 { // start doubling the sleep after 1ms...
 			delay *= 2
 		}

@@ -18,5 +18,6 @@ func nonblockingPipe() (r, w int32, errno int32) {
 		closeonexec(w)
 		setNonblock(w)
 	}
+	println("pipe r=",r," w=",w," errno=",errno);
 	return r, w, errno
 }
